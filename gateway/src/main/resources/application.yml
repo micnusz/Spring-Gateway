@@ -5,20 +5,21 @@ spring:
   cloud:
     gateway:
       server:
-        routes:
-          - id: user-service
-            uri: http://user-service:8080
-            predicates:
-              - Path=/api/users/**
-            filters:
-              - StripPrefix=2
+        webflux:
+          routes:
+            - id: user-service
+              uri: http://user-service:8080
+              predicates:
+                - Path=/api/users/**
+              filters:
+                - StripPrefix=2
 
-          - id: role-service
-            uri: http://role-service:8080
-            predicates:
-              - Path=/api/roles/**
-            filters:
-              - StripPrefix=2
+            - id: role-service
+              uri: http://role-service:8080
+              predicates:
+                - Path=/api/roles/**
+              filters:
+                - StripPrefix=2
 
 logging:
   level:
