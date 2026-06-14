@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: product-service
+          uri: lb://product-service  # service discovery FTW
+          predicates:
+            - Path=/api/products/**
+        - id: legacy-users
+          uri: http://legacy.internal.com:8080  # sometimes you gotta hardcode
+          predicates:
+            - Path=/api/users/**
