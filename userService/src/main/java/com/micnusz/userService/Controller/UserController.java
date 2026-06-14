@@ -9,6 +9,6 @@ public class UserController {
 
     @GetMapping("/message")
     public String getMessage(){
-        return "Hello World";
+        return "userController response";
     }
 }
