@@ -1,0 +1,22 @@
+services:
+
+  gateway:
+    build: ./gateway
+    image: gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - user-service
+      - role-service
+
+  user-service:
+    build: ./userService
+    image: user-service
+    ports:
+      - "8081:8080"
+
+  role-service:
+    build: ./roleService
+    image: role-service
+    ports:
+      - "8082:8080"

@@ -1,14 +1,21 @@
 spring:
   application:
     name: api-gateway
+
   cloud:
     gateway:
       routes:
-        - id: product-service
-          uri: lb://product-service  # service discovery FTW
-          predicates:
-            - Path=/api/products/**
-        - id: legacy-users
-          uri: http://legacy.internal.com:8080  # sometimes you gotta hardcode
+
+        - id: user-service
+          uri: http://user-service:8080
           predicates:
             - Path=/api/users/**
+          filters:
+            - RewritePath=/api/users/(?<segment>.*), /${segment}
+
+        - id: role-service
+          uri: http://role-service:8080
+          predicates:
+            - Path=/api/roles/**
+          filters:
+          - RewritePath=/api/users/(?<segment>.*), /${segment}
