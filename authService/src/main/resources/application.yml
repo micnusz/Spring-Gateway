@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: auth-service
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/authdb}
+    username: ${SPRING_DATASOURCE_USERNAME:admin}
+    password: ${SPRING_DATASOURCE_PASSWORD:secret}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+
+security:
+  jwt:
+    secret-key: ${SECURITY_JWT_SECRET_KEY}
+    expiration: 86400000
+
+server:
+  port: 8080
