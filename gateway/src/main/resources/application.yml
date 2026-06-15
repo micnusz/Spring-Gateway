@@ -47,6 +47,13 @@ spring:
                       maxBackoff: 500ms
                       factor: 2
 
+            - id: auth-service
+              uri: http://auth-service:8080
+              predicates:
+                - Path=/api/auth/**
+              filters:
+                - StripPrefix=1
+
 resilience4j:
   circuitbreaker:
     instances:
