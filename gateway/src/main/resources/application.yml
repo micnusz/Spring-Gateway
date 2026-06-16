@@ -96,6 +96,12 @@ management:
       enabled: true
     health:
       show-details: always
+    prometheus:
+      enabled: true
+  prometheus:
+    metrics:
+      export:
+        enabled: true
   health:
     circuitbreakers:
       enabled: true
