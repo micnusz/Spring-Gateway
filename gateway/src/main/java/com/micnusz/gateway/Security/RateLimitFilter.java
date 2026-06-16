@@ -43,15 +43,24 @@ public class RateLimitFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange serverWebExchange, GatewayFilterChain gatewayFilterChain) {
         String key = extractKey(serverWebExchange);
         Bucket bucket = buckets.get(key);
+
         if (bucket.tryConsume(1)) {
             return gatewayFilterChain.filter(serverWebExchange);
         }
+
         ServerHttpResponse response = serverWebExchange.getResponse();
+        if (response.isCommitted()) {
+            return Mono.empty();
+        }
+
         response.setStatusCode(HttpStatus.TOO_MANY_REQUESTS);
         response.getHeaders().add("Retry-After", "60");
         response.getHeaders().add("X-RateLimit-Remaining", "0");
+        response.getHeaders().add("Content-Type", "application/json");
 
-        return response.setComplete();
+        byte[] bytes = "{\"status\":\"429\",\"message\":\"Too many requests. Try again later.\"}".getBytes();
+        org.springframework.core.io.buffer.DataBuffer buffer = response.bufferFactory().wrap(bytes);
+        return response.writeWith(Mono.just(buffer));
     }
 
     private String extractKey(ServerWebExchange exchange) {
